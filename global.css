@@ -1,0 +1,103 @@
+/* ===========================================================
+   Bikewatching — global page styles
+   =========================================================== */
+
+:root {
+  --color-departures: steelblue;
+  --color-arrivals: darkorange;
+  /* Mixed color driven by the per-element --departure-ratio variable.
+     This single rule lets both the map circles AND the legend swatches
+     share the exact same color logic — define once, use everywhere. */
+  --color: color-mix(
+    in oklch,
+    var(--color-departures) calc(100% * var(--departure-ratio)),
+    var(--color-arrivals)
+  );
+}
+
+body {
+  font: 100%/1.5 system-ui, sans-serif;
+  display: flex;
+  flex-flow: column;
+  max-width: 80em;
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin: auto;
+  padding: 1em;
+  color: #1f2933;
+  background: #fafafa;
+}
+
+/* ---------- Header (title + slider) ---------- */
+.page-header {
+  display: flex;
+  gap: 1em;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+}
+
+.page-header label {
+  margin-left: auto;            /* push the filter to the right */
+  display: flex;
+  flex-direction: column;       /* keep <time>/<em> on their own line */
+  align-items: flex-end;
+  gap: 0.25em;
+  font-size: 0.95rem;
+}
+
+.page-header input[type="range"] {
+  width: 14em;
+}
+
+.page-header time,
+.page-header em {
+  display: block;
+  font-variant-numeric: tabular-nums;
+}
+
+.page-header em {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.page-blurb {
+  margin: 0.5em 0 1em;
+  color: #374151;
+  max-width: 60ch;
+}
+
+/* ---------- Legend ---------- */
+.legend {
+  display: flex;
+  gap: 1px;
+  margin-block: 1em;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  font-size: 0.9rem;
+}
+
+.legend > div {
+  flex: 1;
+  padding: 0.65em 1.2em;
+  background: var(--color);
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+.legend > div:first-child { text-align: left; }
+.legend > div:nth-child(2) { text-align: center; }
+.legend > div:last-child  { text-align: right; }
+
+/* ---------- Footer ---------- */
+.page-footer {
+  margin-top: 2em;
+  color: #6b7280;
+  font-size: 0.85rem;
+}

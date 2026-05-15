@@ -1,0 +1,34 @@
+/* ===========================================================
+   Bikewatching — map + overlay styles
+   =========================================================== */
+
+#map {
+  position: relative;          /* anchors the absolute-positioned SVG */
+  width: 100%;
+  height: 70vh;
+  min-height: 480px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* SVG overlay sits ON TOP of the map but lets pointer events pass through
+   to the map (so you can still pan/zoom). Circles inside re-enable pointer
+   events so tooltips still fire. */
+#map svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+#map svg circle {
+  fill: var(--color);
+  fill-opacity: 0.6;
+  stroke: white;
+  stroke-width: 1;
+  pointer-events: auto;        /* so <title> tooltips work on hover */
+  transition: r 120ms ease-out;
+}
