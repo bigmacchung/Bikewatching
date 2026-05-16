@@ -25,7 +25,7 @@ import * as d3 from 'https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm';
 // IMPORTANT — replace this with your own public access token.
 // Get yours at https://account.mapbox.com/access-tokens/ (starts with `pk.`)
 // ---------------------------------------------------------------------
-mapboxgl.accessToken = 'pk.eyJ1IjoibWFjMDUwIiwiYSI6ImNtcDZ6d3B6bTAxam8ycXB4NmhjeHI2c3EifQ.Q5Az7Am5Qocn0xMFZzJ6Sw';
+mapboxgl.accessToken = prompt('Paste your Mapbox public token starting with pk:');
 
 // Sanity-check that JS is wired up at all
 console.log('Mapbox GL JS Loaded:', mapboxgl);
