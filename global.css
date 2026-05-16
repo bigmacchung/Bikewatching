@@ -5,8 +5,8 @@
 /* Shared color logic for the map circles AND the legend swatches.
    Each circle / legend div sets its own --departure-ratio inline, and
    this rule mixes the two endpoint colors based on it. Defining the
-   variables HERE (not on :root) keeps --departure-ratio in scope when
-   --color is resolved. */
+   variables on the elements themselves keeps --departure-ratio in scope
+   when --color is resolved. */
 #map svg circle,
 .legend > div {
   --color-departures: steelblue;
