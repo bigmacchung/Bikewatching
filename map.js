@@ -215,6 +215,33 @@ map.on('load', async () => {
   // Use station.short_name as the data key so D3 can match existing
   // circles to incoming station data when we re-render on filter
   // changes (instead of destroying and recreating every circle).
+  // -------- Custom tooltip helpers ----------------------------------
+  // Native SVG <title> tooltips work but have a built-in ~1.5s hover
+  // delay. A small floating div positioned by JS appears instantly.
+  const tooltip = document.getElementById('tooltip');
+
+  function showTooltip(event, d) {
+    tooltip.hidden = false;
+    tooltip.innerHTML = `
+      <div class="tt-title">${d.name || d.short_name || 'Station'}</div>
+      <div class="tt-row"><span class="tt-label">Total trips</span><span class="tt-total">${d.totalTraffic}</span></div>
+      <div class="tt-row"><span class="tt-label">Departures</span><span>${d.departures}</span></div>
+      <div class="tt-row"><span class="tt-label">Arrivals</span><span>${d.arrivals}</span></div>
+    `;
+    moveTooltip(event);
+  }
+
+  function moveTooltip(event) {
+    // Offset 14px right + below the cursor so the pointer doesn't cover it.
+    tooltip.style.left = `${event.clientX + 14}px`;
+    tooltip.style.top  = `${event.clientY + 14}px`;
+  }
+
+  function hideTooltip() {
+    tooltip.hidden = true;
+  }
+
+  // -------- Append circles ------------------------------------------
   const circles = svg
     .selectAll('circle')
     .data(stations, (d) => d.short_name)
@@ -222,16 +249,16 @@ map.on('load', async () => {
     .append('circle')
     .attr('r', (d) => radiusScale(d.totalTraffic))
     .style('--departure-ratio', (d) =>
-      stationFlow(d.departures / d.totalTraffic),
+      // Guard against 0/0 — stations with no traffic in the current
+      // window would otherwise produce NaN, which would invalidate
+      // var(--color) and make the circle fall back to default fill.
+      stationFlow(
+        d.totalTraffic > 0 ? d.departures / d.totalTraffic : 0.5,
+      ),
     )
-    .each(function (d) {
-      // Native browser tooltip — quick to wire up, great for debugging.
-      d3.select(this)
-        .append('title')
-        .text(
-          `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`,
-        );
-    });
+    .on('mouseover', showTooltip)
+    .on('mousemove', moveTooltip)
+    .on('mouseout',  hideTooltip);
 
   // -------- Step 3.3: Keep markers aligned with the map --------------
   function updatePositions() {
@@ -265,13 +292,13 @@ map.on('load', async () => {
       .join('circle')
       .attr('r', (d) => radiusScale(d.totalTraffic))
       .style('--departure-ratio', (d) =>
-        stationFlow(d.departures / d.totalTraffic),
-      )
-      .select('title')
-      .text(
-        (d) =>
-          `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`,
+        stationFlow(
+          d.totalTraffic > 0 ? d.departures / d.totalTraffic : 0.5,
+        ),
       );
+    // The mouseover handler reads the bound datum every time it fires,
+    // so the tooltip always shows the *current* filtered values
+    // without us needing to re-bind any handlers here.
   }
 
   function updateTimeDisplay() {
