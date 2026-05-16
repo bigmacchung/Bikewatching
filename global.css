@@ -2,12 +2,15 @@
    Bikewatching — global page styles
    =========================================================== */
 
-:root {
+/* Shared color logic for the map circles AND the legend swatches.
+   Each circle / legend div sets its own --departure-ratio inline, and
+   this rule mixes the two endpoint colors based on it. Defining the
+   variables HERE (not on :root) keeps --departure-ratio in scope when
+   --color is resolved. */
+#map svg circle,
+.legend > div {
   --color-departures: steelblue;
   --color-arrivals: darkorange;
-  /* Mixed color driven by the per-element --departure-ratio variable.
-     This single rule lets both the map circles AND the legend swatches
-     share the exact same color logic — define once, use everywhere. */
   --color: color-mix(
     in oklch,
     var(--color-departures) calc(100% * var(--departure-ratio)),
