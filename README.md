@@ -1,7 +1,8 @@
 # 🚴🏼‍♀️ Bikewatching
 
-DSC 106 Lab 7 — an interactive map of BlueBikes traffic across the Boston area
+DSC 106 Lab 7, an interactive map of BlueBikes traffic across the Boston area
 in March 2024. Built with Mapbox GL JS and D3.
+[View the live website](https://bigmacchung.github.io/Bikewatching/)
 
 The map shows:
 - **Boston + Cambridge bike lanes** (green lines, two open-data GeoJSON sources)
